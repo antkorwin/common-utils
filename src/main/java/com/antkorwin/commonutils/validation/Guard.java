@@ -2,6 +2,7 @@ package com.antkorwin.commonutils.validation;
 
 import com.antkorwin.commonutils.exceptions.ConditionValidationException;
 import com.antkorwin.commonutils.exceptions.NotFoundException;
+import com.antkorwin.commonutils.exceptions.WrongArgumentException;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -15,6 +16,10 @@ public class Guard {
 
     public static void checkEntityExist(Object entity, ErrorInfo errorInfo) {
         if (entity == null) throw new NotFoundException(errorInfo);
+    }
+
+    public static void checkArgumentExist(Object argument, ErrorInfo errorInfo) {
+        if (argument == null) throw new WrongArgumentException(errorInfo);
     }
 
     public static void check(boolean condition, ErrorInfo errorInfo) {
