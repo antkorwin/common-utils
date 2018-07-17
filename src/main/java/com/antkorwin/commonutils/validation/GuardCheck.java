@@ -64,7 +64,6 @@ public class GuardCheck {
 
 
     private static boolean isSameException(Class<? extends Throwable> expectedClass, Throwable cause) {
-        return cause instanceof RuntimeException &&
-               expectedClass.isInstance(cause);
+        return expectedClass.isInstance(cause);
     }
 }
