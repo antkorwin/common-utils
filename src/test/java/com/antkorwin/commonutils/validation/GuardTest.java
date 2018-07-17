@@ -107,7 +107,7 @@ public class GuardTest {
         Assertions.assertThat(actual).isNotNull();
         Assertions.assertThat(actual).isInstanceOf(ConditionValidationException.class);
         Assertions.assertThat(actual.getMessage()).isEqualTo("error");
-        Assertions.assertThat(((BaseException)actual).getCode()).isEqualTo(1000);
+        Assertions.assertThat(((BaseException) actual).getCode()).isEqualTo(1000);
     }
 
     @Test
@@ -136,28 +136,6 @@ public class GuardTest {
         Assertions.assertThat(actual).isNotNull();
         Assertions.assertThat(actual).isInstanceOf(WrongArgumentException.class);
         Assertions.assertThat(actual.getMessage()).isEqualTo("wrong arg");
-        Assertions.assertThat(((BaseException)actual).getCode()).isEqualTo(1001);
-    }
-
-    private enum TestErrorInfo implements ErrorInfo {
-        TEST_ERROR("error"),
-        TEST_ERROR_ARG("wrong arg");
-
-        private static final int BASE = 1000;
-        private final String msg;
-
-        TestErrorInfo(String msg) {
-            this.msg = msg;
-        }
-
-        @Override
-        public String getMessage() {
-            return this.msg;
-        }
-
-        @Override
-        public Integer getCode() {
-            return BASE + ordinal();
-        }
+        Assertions.assertThat(((BaseException) actual).getCode()).isEqualTo(1001);
     }
 }

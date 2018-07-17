@@ -16,4 +16,16 @@ public class WrongArgumentException extends BaseException {
     public WrongArgumentException(ErrorInfo errorInfo) {
         super(errorInfo);
     }
+
+    public WrongArgumentException(Throwable cause) {
+        super(cause);
+    }
+
+    public WrongArgumentException(String message, Integer code, Throwable cause) {
+        super(message, code, cause);
+    }
+
+    public WrongArgumentException(ErrorInfo errorInfo, Throwable cause) {
+        super(errorInfo, cause);
+    }
 }

@@ -13,7 +13,7 @@ import org.junit.Assert;
 public class GuardCheck {
 
 
-    public static void check(Runnable action, Class<? extends Throwable> exceptionClass, ErrorInfo errorInfo) {
+    public static void check(Runnable action, Class<? extends Throwable> expectedExceptionClass, ErrorInfo errorInfo) {
 
         boolean fail = false;
         try {
@@ -24,19 +24,47 @@ public class GuardCheck {
             Throwable cause = t;
             while (cause.getCause() != null) cause = cause.getCause();
 
-            if (cause instanceof RuntimeException && exceptionClass.isInstance(cause.getCause())) {
-                Assert.assertEquals(errorInfo.getMessage(), cause.getCause().getMessage());
-            } else if (exceptionClass.isInstance(cause)) {
+            if (isSameException(expectedExceptionClass, cause)) {
+                Assert.assertEquals(errorInfo.getMessage(), cause.getMessage());
+            } else if (expectedExceptionClass.isInstance(cause)) {
                 Assert.assertEquals(errorInfo.getMessage(), cause.getMessage());
             } else {
                 Assert.fail(String.format("Bad exception type.\n\tExpected: %s,\n\tRecieved: %s",
-                                          exceptionClass.getName(),
+                                          expectedExceptionClass.getName(),
                                           cause.getClass().getName()));
             }
         }
 
         if (fail) Assert.fail(String.format("No exception was thrown, but expected: %s(%s)",
-                                            exceptionClass.getSimpleName(),
+                                            expectedExceptionClass.getSimpleName(),
                                             errorInfo));
+    }
+
+
+    public static void check(Runnable action, Class<? extends Throwable> expectedExceptionClass) {
+        boolean fail = false;
+        try {
+            action.run();
+            fail = true;
+        } catch (Throwable t) {
+            // находим первопричину
+            Throwable cause = t;
+            while (cause.getCause() != null) cause = cause.getCause();
+
+            if (!isSameException(expectedExceptionClass, cause)) {
+                Assert.fail(String.format("Bad exception type.\n\tExpected: %s,\n\tRecieved: %s",
+                                          expectedExceptionClass.getName(),
+                                          cause.getClass().getName()));
+            }
+        }
+
+        if (fail) Assert.fail(String.format("No exception was thrown, but expected: %s",
+                                            expectedExceptionClass.getSimpleName()));
+    }
+
+
+    private static boolean isSameException(Class<? extends Throwable> expectedClass, Throwable cause) {
+        return cause instanceof RuntimeException &&
+               expectedClass.isInstance(cause);
     }
 }

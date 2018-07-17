@@ -18,4 +18,16 @@ public class ConditionValidationException extends BaseException {
     public ConditionValidationException(ErrorInfo errorInfo) {
         super(errorInfo);
     }
+
+    public ConditionValidationException(Throwable cause) {
+        super(cause);
+    }
+
+    public ConditionValidationException(String message, Integer code, Throwable cause) {
+        super(message, code, cause);
+    }
+
+    public ConditionValidationException(ErrorInfo errorInfo, Throwable cause) {
+        super(errorInfo, cause);
+    }
 }
