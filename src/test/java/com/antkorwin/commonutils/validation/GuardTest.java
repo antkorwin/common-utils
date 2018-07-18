@@ -33,6 +33,11 @@ public class GuardTest {
         Assertions.assertThat(actual).isInstanceOf(NullPointerException.class);
     }
 
+    @Test(expected = IndexOutOfBoundsException.class)
+    public void name() throws Exception {
+        Guard.check( 02 + 010 == 12, IndexOutOfBoundsException.class, "ooops");
+    }
+
     @Test
     public void testGuardWithoutThrowing() {
         Guard.check(true, NullPointerException.class);
