@@ -4,6 +4,8 @@ import com.antkorwin.commonutils.exceptions.ConditionValidationException;
 import lombok.AllArgsConstructor;
 import org.junit.Test;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 /**
  * Created on 23.07.2018.
  *
@@ -18,7 +20,8 @@ public class BaseActionTest {
 
     @Test
     public void executeFail() {
-        new TestAction().execute(new TestArgument(true));
+        String result = new TestAction().execute(new TestArgument(true));
+        assertThat(result).containsIgnoringCase("hello world");
     }
 
 
