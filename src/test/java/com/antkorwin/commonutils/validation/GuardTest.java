@@ -9,9 +9,9 @@ import org.junit.Test;
 import java.io.IOException;
 
 /**
- * Created by Korovin Anatolii on 04.07.2018.
+ * Created by Korovin Anatoliy on 04.07.2018.
  *
- * @author Korovin Anatolii
+ * @author Korovin Anatoliy
  * @version 1.0
  */
 public class GuardTest {
