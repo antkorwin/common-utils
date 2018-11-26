@@ -24,11 +24,13 @@ public class GcUtils {
     /**
      *
      * Runs garbage collector as many times as needed to release all
-     * unused Phantom & Weak references and invocation of finalize methods.
+     * unused Phantom and Weak references and invocation of finalize methods.
+     * <p>&nbsp;</p>
      *
      * This method can be useful when you testing a something depended on GC.
+     * <p>&nbsp;</p>
      *
-     * IMPLEMENTATION-NOTES:
+     * IMPLEMENTATION-NOTES:<p>
      * This method creates a new PhantomReference on unreferenced object
      * and then runs a GC multiple times until this object is finalize.
      * Also, this method waits for enqueue the PhantomReference and expect
