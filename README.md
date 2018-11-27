@@ -1,27 +1,18 @@
 # Different Java utility
 
 [![Build Status](https://travis-ci.com/antkorwin/common-utils.svg?branch=master)](https://travis-ci.com/antkorwin/common-utils)
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.antkorwin/common-utils/badge.svg)](https://search.maven.org/search?q=g:com.antkorwin%20AND%20a:common-utils)
 
 This is a utility for simplifying the writing of tests. 
 
 ## Getting started
 
-To use this tools, you need to add the next repository:
-```xml
-<repositories>
-    <repository>
-        <id>jitpack.io</id>
-        <url>https://jitpack.io</url>
-    </repository>
-</repositories>
-```
-
-and dependency:
+Dependency:
 ```xml
 <dependency>
-    <groupId>com.github.antkorwin</groupId>
-    <artifactId>common-utils</artifactId>
-    <version>0.71</version>
+  <groupId>com.antkorwin</groupId>
+  <artifactId>common-utils</artifactId>
+  <version>1.0</version>
 </dependency>
 ```
 
