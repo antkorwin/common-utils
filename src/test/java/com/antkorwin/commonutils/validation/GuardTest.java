@@ -1,12 +1,11 @@
 package com.antkorwin.commonutils.validation;
 
-import com.antkorwin.commonutils.exceptions.BaseException;
-import com.antkorwin.commonutils.exceptions.ConditionValidationException;
-import com.antkorwin.commonutils.exceptions.WrongArgumentException;
+import com.antkorwin.commonutils.exceptions.*;
 import org.assertj.core.api.Assertions;
 import org.junit.Test;
 
 import java.io.IOException;
+import java.util.MissingResourceException;
 
 /**
  * Created by Korovin Anatoliy on 04.07.2018.
@@ -35,7 +34,7 @@ public class GuardTest {
 
     @Test(expected = IndexOutOfBoundsException.class)
     public void name() throws Exception {
-        Guard.check( 02 + 010 == 12, IndexOutOfBoundsException.class, "ooops");
+        Guard.check(02 + 010 == 12, IndexOutOfBoundsException.class, "ooops");
     }
 
     @Test
@@ -142,5 +141,62 @@ public class GuardTest {
         Assertions.assertThat(actual).isInstanceOf(WrongArgumentException.class);
         Assertions.assertThat(actual.getMessage()).isEqualTo("wrong arg");
         Assertions.assertThat(((BaseException) actual).getCode()).isEqualTo(1001);
+    }
+
+    @Test
+    public void testThrowsSelectedExceptionWithErrorInfo() {
+        // Arrange
+        Exception actual = null;
+        // Act
+        try {
+            Guard.check(false, NotFoundException.class, TestErrorInfo.TEST_ERROR);
+        } catch (Exception e) {
+            actual = e;
+        }
+        // Asserts
+        Assertions.assertThat(actual).isNotNull();
+        Assertions.assertThat(actual).isInstanceOf(NotFoundException.class);
+        Assertions.assertThat(actual.getMessage())
+                  .isEqualTo(TestErrorInfo.TEST_ERROR.getMessage());
+        Assertions.assertThat(((BaseException) actual).getCode())
+                  .isEqualTo(TestErrorInfo.TEST_ERROR.getCode());
+    }
+
+    @Test
+    public void testCheckWithExceptionNotInheritedFromBaseException() {
+        // Arrange
+        Exception actual = null;
+        // Act
+        try {
+            Guard.check(false,
+                        RuntimeException.class,  // not inherit from the BaseException
+                        TestErrorInfo.TEST_ERROR);
+        } catch (Exception e) {
+            actual = e;
+        }
+        // Asserts
+        Assertions.assertThat(actual).isNotNull();
+        Assertions.assertThat(actual).isInstanceOf(RuntimeException.class);
+        Assertions.assertThat(actual.getMessage())
+                  .isEqualTo(TestErrorInfo.TEST_ERROR.getMessage());
+    }
+
+    @Test
+    public void testCheckWithWrongTypeException() {
+        // Arrange
+        Exception actual = null;
+        // Act
+        try {
+            Guard.check(false,
+                        MissingResourceException.class,  //exception without String argument constructor
+                        TestErrorInfo.TEST_ERROR);
+        } catch (Exception e) {
+            actual = e;
+        }
+        // Asserts
+        Assertions.assertThat(actual).isNotNull();
+        Assertions.assertThat(actual).isInstanceOf(InternalException.class);
+        Assertions.assertThat(actual.getMessage())
+                  .isEqualTo(InternalErrorInfo.EXCEPTION_CONSTRUCTOR_NOT_FOUND.getMessage());
     }
 }
