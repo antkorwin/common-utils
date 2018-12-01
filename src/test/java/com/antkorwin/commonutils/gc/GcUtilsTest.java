@@ -51,8 +51,8 @@ public class GcUtilsTest {
 
         // Asserts
         Assertions.assertThat(ref.isEnqueued()).isTrue();
-        // expect of release phantom reference until runs 3 iterations(maximum)
-        Assertions.assertThat(gcPass).isLessThanOrEqualTo(3);
+        // expect of release phantom reference until runs 4 iterations(maximum)
+        Assertions.assertThat(gcPass).isLessThanOrEqualTo(4);
         Assertions.assertThat(queue.poll()).isEqualTo(ref);
     }
 
