@@ -1,6 +1,7 @@
 package com.antkorwin.commonutils.validation;
 
 import com.antkorwin.commonutils.exceptions.BaseException;
+import com.antkorwin.commonutils.exceptions.InternalException;
 import com.antkorwin.commonutils.exceptions.NotFoundException;
 import org.junit.Test;
 
@@ -103,6 +104,30 @@ public class GuardCheckTest {
         doThrow(new NotFoundException(TestErrorInfo.TEST_ERROR)).when(runnable).run();
         // Act
         GuardCheck.check(runnable, BaseException.class, TestErrorInfo.TEST_ERROR);
+        // Asserts
+        verify(runnable).run();
+    }
+
+    @Test
+    public void testWithNestedCause() {
+        // Arrange
+        Runnable runnable = mock(Runnable.class);
+        doThrow(new NotFoundException(TestErrorInfo.TEST_ERROR, new IndexOutOfBoundsException("123")))
+                .when(runnable).run();
+        // Act
+        GuardCheck.check(runnable, NotFoundException.class, TestErrorInfo.TEST_ERROR);
+        // Asserts
+        verify(runnable).run();
+    }
+
+    @Test
+    public void testNestedGuard() {
+        // Arrange
+        Runnable runnable = mock(Runnable.class);
+        doThrow(new NotFoundException(TestErrorInfo.TEST_ERROR, new InternalException(TestErrorInfo.TEST_ERROR_ARG)))
+                .when(runnable).run();
+        // Act
+        GuardCheck.checkNested(runnable, InternalException.class, TestErrorInfo.TEST_ERROR_ARG);
         // Asserts
         verify(runnable).run();
     }
