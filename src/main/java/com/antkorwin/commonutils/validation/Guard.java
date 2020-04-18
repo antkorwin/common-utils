@@ -1,9 +1,13 @@
 package com.antkorwin.commonutils.validation;
 
-import com.antkorwin.commonutils.exceptions.*;
-
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+
+import com.antkorwin.commonutils.exceptions.BaseException;
+import com.antkorwin.commonutils.exceptions.ConditionValidationException;
+import com.antkorwin.commonutils.exceptions.InternalException;
+import com.antkorwin.commonutils.exceptions.NotFoundException;
+import com.antkorwin.commonutils.exceptions.WrongArgumentException;
 
 import static com.antkorwin.commonutils.validation.InternalErrorInfo.EXCEPTION_CONSTRUCTOR_NOT_FOUND;
 
@@ -17,19 +21,19 @@ public class Guard {
     public static void checkEntityExist(Object entity,
                                         ErrorInfo errorInfo) {
 
-        if (entity == null) throw new NotFoundException(errorInfo);
+        if (entity == null) { throw new NotFoundException(errorInfo); }
     }
 
     public static void checkArgumentExist(Object argument,
                                           ErrorInfo errorInfo) {
 
-        if (argument == null) throw new WrongArgumentException(errorInfo);
+        if (argument == null) { throw new WrongArgumentException(errorInfo); }
     }
 
     public static void check(boolean condition,
                              ErrorInfo errorInfo) {
 
-        if (!condition) throw new ConditionValidationException(errorInfo);
+        if (!condition) { throw new ConditionValidationException(errorInfo); }
     }
 
     public static void check(boolean condition,
@@ -83,9 +87,10 @@ public class Guard {
     /**
      * check condition, throws exception when condition not equal "true"
      *
-     * @param condition condition (must be true)
+     * @param condition     condition (must be true)
      * @param exceptionType exception class that will throw from guard (must be inherit from the BaseException)
-     * @param errorInfo error details for exception
+     * @param errorInfo     error details for exception
+     * @param <T>           the type of exception
      */
     public static <T extends RuntimeException> void check(boolean condition, Class<T> exceptionType, ErrorInfo errorInfo) {
 
