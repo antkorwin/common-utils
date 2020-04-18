@@ -83,15 +83,18 @@ class TempFileTest {
         void throwUncheckedExceptionInProcessingFunc() {
             // Arrange
             InputStream inputStream = new ByteArrayInputStream(TEST_DATA.getBytes());
+            AtomicReference<String> fileName = new AtomicReference<>();
             // Act
             RuntimeException exc = Assertions.assertThrows(IndexOutOfBoundsException.class, () -> {
                 new TempFile(() -> inputStream)
                         .evaluate(f -> {
+                            fileName.set(f.getAbsolutePath());
                             // Act
                             throw new IndexOutOfBoundsException("oops");
                         });
             });
             // Assert
+            assertThat(new File(fileName.get()).exists()).isFalse();
             assertThat(exc.getMessage()).isEqualTo("oops");
         }
 
@@ -99,10 +102,12 @@ class TempFileTest {
         void throwCheckedExceptionInProcessingFunc() {
             // Arrange
             InputStream inputStream = new ByteArrayInputStream(TEST_DATA.getBytes());
+            AtomicReference<String> fileName = new AtomicReference<>();
             // Act
             WrappedException exc = Assertions.assertThrows(WrappedException.class, () -> {
                 new TempFile(() -> inputStream)
                         .evaluate(f -> {
+                            fileName.set(f.getAbsolutePath());
                             // Act
                             throw new IOException("oops");
                         });
@@ -110,14 +115,16 @@ class TempFileTest {
             // Assert
             assertThat(exc.getMessage()).contains("oops");
             assertThat(exc.getCause()).isInstanceOf(IOException.class);
+            // assert that file is removed
+            assertThat(new File(fileName.get()).exists()).isFalse();
         }
 
         @Test
         void throwUncheckedExceptionFromInputStreamSupplier() {
-
             // Act
             IndexOutOfBoundsException exc = Assertions.assertThrows(IndexOutOfBoundsException.class, () -> {
                 new TempFile(() -> {
+                    // Act
                     throw new IndexOutOfBoundsException("oops");
                 }).evaluate(f -> "123");
             });
@@ -127,10 +134,9 @@ class TempFileTest {
 
         @Test
         void throwCheckedExceptionFromInputStreamSupplier() {
-
-            // Act
             WrappedException exc = Assertions.assertThrows(WrappedException.class, () -> {
                 new TempFile(() -> {
+                    // Act
                     throw new IOException("oops");
                 }).evaluate(f -> "123");
             });
@@ -188,15 +194,18 @@ class TempFileTest {
         void throwUncheckedExceptionInProcessingFunc() {
             // Arrange
             InputStream inputStream = new ByteArrayInputStream(TEST_DATA.getBytes());
+            AtomicReference<String> fileName = new AtomicReference<>();
             // Act
             RuntimeException exc = Assertions.assertThrows(IndexOutOfBoundsException.class, () -> {
                 new TempFile(() -> inputStream)
                         .run(f -> {
+                            fileName.set(f.getAbsolutePath());
                             // Act
                             throw new IndexOutOfBoundsException("oops");
                         });
             });
             // Assert
+            assertThat(new File(fileName.get()).exists()).isFalse();
             assertThat(exc.getMessage()).isEqualTo("oops");
         }
 
@@ -204,10 +213,12 @@ class TempFileTest {
         void throwCheckedExceptionInProcessingFunc() {
             // Arrange
             InputStream inputStream = new ByteArrayInputStream(TEST_DATA.getBytes());
+            AtomicReference<String> fileName = new AtomicReference<>();
             // Act
             WrappedException exc = Assertions.assertThrows(WrappedException.class, () -> {
                 new TempFile(() -> inputStream)
                         .run(f -> {
+                            fileName.set(f.getAbsolutePath());
                             // Act
                             throw new IOException("oops");
                         });
@@ -215,14 +226,15 @@ class TempFileTest {
             // Assert
             assertThat(exc.getMessage()).contains("oops");
             assertThat(exc.getCause()).isInstanceOf(IOException.class);
+            // Assert that file is removed
+            assertThat(new File(fileName.get()).exists()).isFalse();
         }
 
         @Test
         void throwUncheckedExceptionFromInputStreamSupplier() {
-
-            // Act
             IndexOutOfBoundsException exc = Assertions.assertThrows(IndexOutOfBoundsException.class, () -> {
                 new TempFile(() -> {
+                    // Act
                     throw new IndexOutOfBoundsException("oops");
                 }).run(f -> {/* nop */});
             });
@@ -232,10 +244,9 @@ class TempFileTest {
 
         @Test
         void throwCheckedExceptionFromInputStreamSupplier() {
-
-            // Act
             WrappedException exc = Assertions.assertThrows(WrappedException.class, () -> {
                 new TempFile(() -> {
+                    // Act
                     throw new IOException("oops");
                 }).run(f -> {/* nop */});
             });
