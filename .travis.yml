@@ -1,6 +1,6 @@
 language: java
 jdk:
- - oraclejdk8
+ - openjdk8
 
 script:
  - mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent package sonar:sonar
@@ -8,9 +8,7 @@ script:
 addons:
   sonarcloud:
     organization: "antkorwin-github"
-    token:
-      secure: "faca0ba57e2786f53d9caa7099033aa000953f0f"
+    token: $SONAR_CLOUD_KEY
 
 after_success:
- - mvn cobertura:cobertura
  - bash <(curl -s https://codecov.io/bash)
